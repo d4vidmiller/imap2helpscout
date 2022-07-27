@@ -5,9 +5,10 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/BrianLeishman/go-imap"
+	"imap2helpscout/helpscout"
 	"io"
 	"log"
-
 	// "net/http"
 	// _ "net/http/pprof"
 	"net/mail"
@@ -16,8 +17,6 @@ import (
 	"sync"
 	"unicode"
 
-	"github.com/StirlingMarketingGroup/go-helpscout"
-	"github.com/BrianLeishman/go-imap"
 	"github.com/mitchellh/go-homedir"
 	"gopkg.in/cheggaaa/pb.v1"
 
@@ -92,7 +91,7 @@ func main() {
 	// }()
 
 	username := flag.String("u", "", "your IMAP username")
-	password := flag.String("p", "", "your IMAP password")
+	password := flag.String("p", "RmKa~E @f?na$X8TdKIE", "your IMAP password")
 	server := flag.String("h", "", "your IMAP connection host")
 	port := flag.Int("P", 0, "your IMAP connection port")
 
@@ -461,7 +460,7 @@ func main() {
 							subject = e.Subject
 						}
 
-						var conversationID, threadID int
+						var conversationID, threadID uint64
 						helpScoutCh <- struct{}{}
 						if !*test {
 							if from.Email == *username {
@@ -541,6 +540,7 @@ func main() {
 									}
 
 									if !*test {
+										//fmt.Println(a.Content)
 										_, err = hs.UploadAttachment(conversationID, threadID, a.Name, a.MimeType, a.Content)
 									}
 									if err != nil {
